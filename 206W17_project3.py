@@ -224,6 +224,51 @@ for tup in y:
 x = "SELECT Users.screen_name, Tweets.text FROM Users INNER JOIN Tweets on Tweets.user_id=Users.user_id WHERE Tweets.retweets > 50"
 cur.execute(x)
 joined_result = cur.fetchall()
+
+## Task 4 - Manipulating data with comprehensions & libraries
+
+## Use a set comprehension to get a set of all words (combinations of characters separated by whitespace) 
+# among the descriptions in the descriptions_fav_users list. Save the resulting set in a variable called 
+# description_words.
+
+
+description_words = {word for string in descriptions_fav_users for word in string.split()}
+
+## Use a Counter in the collections library to find the most common character among all of the descriptions 
+# in the descriptions_fav_users list. Save that most common character in a variable called most_common_char. 
+# Break any tie alphabetically (but using a Counter will do a lot of work for you...).
+x = collections.Counter()
+for des in descriptions_fav_users:
+	for word in des:
+		x.update(word)
+most_common_char = x.most_common(1)[0][0]
+
+
+## Putting it all together...
+# Write code to create a dictionary whose keys are Twitter screen names and whose associated values are lists 
+# of tweet texts that that user posted. You may need to make additional queries to your database! To do this, 
+# you can use, and must use at least one of: the DefaultDict container in the collections library, a dictionary 
+# comprehension, list comprehension(s).
+# You should save the final dictionary in a variable called twitter_info_diction.
+x = "SELECT Users.screen_name, Tweets.text FROM Users INNER JOIN Tweets on Tweets.user_id=Users.user_id"
+cur.execute(x)
+tweet_tup = cur.fetchall()
+
+# twitter_info_diction = {}
+# for tup in tweet_tup:
+# 	if tup[0] not in twitter_info_diction:
+# 		twitter_info_diction[tup[0]] = list(tup[1])
+# 	else:
+# 		twitter_info_diction[tup[0]].append(tup[1])
+# print(twitter_info_diction)
+# twitter_info_diction = {k: v for k,v in tweet_tup if v not in list(v)}
+# print(twitter_info_diction)
+
+diction = collections.defaultdict(list)
+for k,v in tweet_tup:
+	diction[k].append(v)
+twitter_info_diction = dict(diction)
+
 ### IMPORTANT: MAKE SURE TO CLOSE YOUR DATABASE CONNECTION AT THE END OF THE FILE HERE SO YOU DO NOT LOCK YOUR DATABASE (it's fixable, but it's a pain). ###
 
 conn.close()
