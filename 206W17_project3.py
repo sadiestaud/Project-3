@@ -187,7 +187,43 @@ conn.commit()
 # All of the following sub-tasks require writing SQL statements and executing them using Python.
 
 # Make a query to select all of the records in the Users database. Save the list of tuples in a variable called users_info.
+x = "SELECT * FROM Users"
+cur.execute(x)
+users_info = cur.fetchall()
+# Make a query to select all of the user screen names from the database. 
+# Save a resulting list of strings (NOT tuples, the strings inside them!) 
+# in the variable screen_names. HINT: a list comprehension will make this easier to complete!
+x = "SELECT screen_name FROM Users"
+cur.execute(x)
+y = cur.fetchall()
+screen_names = []
+for tup in y:
+	for name in tup:
+		screen_names.append(name)
 
+# Make a query to select all of the tweets (full rows of tweet information) that have been retweeted more than 25 times. 
+# Save the result (a list of tuples, or an empty list) in a variable called more_than_25_rts.
+x = "SELECT * FROM Tweets WHERE retweets > 25"
+cur.execute(x)
+more_than_25_rts = cur.fetchall()
+
+# Make a query to select all the descriptions (descriptions only) of the users who have favorited more than 25 tweets. 
+# Access all those strings, and save them in a variable called descriptions_fav_users, which should ultimately be a list of strings.
+x = "SELECT description FROM Users WHERE num_favs > 25"
+cur.execute(x)
+y = cur.fetchall()
+descriptions_fav_users = []
+for tup in y:
+	for des in tup:
+		descriptions_fav_users.append(des)
+
+
+# Make a query using an INNER JOIN to get a list of tuples with 2 elements in each 
+# tuple: the user screenname and the text of the tweet -- for each tweet that has been retweeted more than 50 times. 
+# Save the resulting list of tuples in a variable called joined_result.
+x = "SELECT Users.screen_name, Tweets.text FROM Users INNER JOIN Tweets on Tweets.user_id=Users.user_id WHERE Tweets.retweets > 50"
+cur.execute(x)
+joined_result = cur.fetchall()
 ### IMPORTANT: MAKE SURE TO CLOSE YOUR DATABASE CONNECTION AT THE END OF THE FILE HERE SO YOU DO NOT LOCK YOUR DATABASE (it's fixable, but it's a pain). ###
 
 conn.close()
