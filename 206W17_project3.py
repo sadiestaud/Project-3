@@ -174,14 +174,6 @@ for user in user_table:
 	cur.execute(statement, user)
 conn.commit()
 
-
-## HINT #2: You may want to go back to a structure we used in class this week to ensure that you reference the user correctly in each Tweet record.
-## HINT #3: The users mentioned in each tweet are included in the tweet dictionary -- you don't need to do any manipulation of the Tweet text to find out which they are! Do some nested data investigation on a dictionary that represents 1 tweet to see it!
-
-
-
-
-
 ## Task 3 - Making queries, saving data, fetching data
 
 # All of the following sub-tasks require writing SQL statements and executing them using Python.
@@ -254,21 +246,11 @@ x = "SELECT Users.screen_name, Tweets.text FROM Users INNER JOIN Tweets on Tweet
 cur.execute(x)
 tweet_tup = cur.fetchall()
 
-# twitter_info_diction = {}
-# for tup in tweet_tup:
-# 	if tup[0] not in twitter_info_diction:
-# 		twitter_info_diction[tup[0]] = list(tup[1])
-# 	else:
-# 		twitter_info_diction[tup[0]].append(tup[1])
-# print(twitter_info_diction)
-# twitter_info_diction = {k: v for k,v in tweet_tup if v not in list(v)}
-# print(twitter_info_diction)
-
 diction = collections.defaultdict(list)
 for k,v in tweet_tup:
 	diction[k].append(v)
 twitter_info_diction = dict(diction)
-
+print(twitter_info_diction)
 ### IMPORTANT: MAKE SURE TO CLOSE YOUR DATABASE CONNECTION AT THE END OF THE FILE HERE SO YOU DO NOT LOCK YOUR DATABASE (it's fixable, but it's a pain). ###
 
 conn.close()
